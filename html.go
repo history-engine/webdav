@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -30,29 +31,18 @@ func parseHtml(html string) *Article {
 		Content: html,
 	}
 
-	body, err := json.Marshal(req)
-	if err != nil {
-		panic(err)
-	}
-
+	body, _ := json.Marshal(req)
 	res, err := http.DefaultClient.Post(API, "application/json", bytes.NewReader(body))
 	if err != nil {
-		panic(err)
+		fmt.Printf("request readability err: %v\n", err)
+		return nil
 	}
 
 	body, _ = io.ReadAll(res.Body)
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			panic(err)
-		}
-	}(res.Body)
+	defer res.Body.Close()
 
 	article := &Article{}
-	err = json.Unmarshal(body, article)
-	if err != nil {
-		panic(err)
-	}
+	_ = json.Unmarshal(body, article)
 
 	return article
 }

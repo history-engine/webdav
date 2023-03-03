@@ -1,33 +1,37 @@
 package main
 
 import (
+	"fmt"
 	"io"
-	"log"
 	"net/http"
 )
 
 func indexHookHandle(r *http.Request) {
+	// SingleFile只有PUT MKCOL PROPFIND 3种调用
 	switch r.Method {
-	case "DELETE":
-		//
-		break
 	case "PUT":
 		indexPut(r)
+		break
+
+	default:
+		// todo
+		break
 	}
 }
 
 func indexPut(r *http.Request) {
 	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		panic(err)
-	}
 	defer r.Body.Close()
+	if err != nil {
+		fmt.Printf("read html content err: %v\n", err)
+		return
+	}
 
 	// 解析html
 	content := string(body)
 	article := parseHtml(content)
 	if article == nil {
-		log.Printf("parse html err: %s\n", r.URL.Path)
+		fmt.Printf("parse html content err: %s\n", r.URL.Path)
 		return
 	}
 
