@@ -33,14 +33,13 @@ func parseHtml(html string) *Article {
 
 	body, _ := json.Marshal(req)
 	res, err := http.DefaultClient.Post(API, "application/json", bytes.NewReader(body))
-	if err != nil {
+	if err != nil || res == nil {
 		fmt.Printf("request readability err: %v\n", err)
 		return nil
 	}
-
-	body, _ = io.ReadAll(res.Body)
 	defer res.Body.Close()
 
+	body, _ = io.ReadAll(res.Body)
 	article := &Article{}
 	_ = json.Unmarshal(body, article)
 

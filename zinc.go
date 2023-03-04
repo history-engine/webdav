@@ -32,11 +32,11 @@ func PutDoc(id string, doc *ZincDocument) {
 	req.SetBasicAuth("admin", "123456")
 
 	res, err := http.DefaultClient.Do(req)
-	defer res.Body.Close()
-	if err != nil {
+	if err != nil || res == nil {
 		fmt.Printf("put zinc index err: %v\n", err)
 		return
 	}
+	defer res.Body.Close()
 
 	body, _ = io.ReadAll(res.Body)
 	fmt.Printf("put zinc index: %s\n", res.Status)

@@ -21,11 +21,11 @@ func indexHookHandle(r *http.Request) {
 
 func indexPut(r *http.Request) {
 	body, err := io.ReadAll(r.Body)
-	defer r.Body.Close()
 	if err != nil {
 		fmt.Printf("read html content err: %v\n", err)
 		return
 	}
+	defer r.Body.Close()
 
 	// 解析html
 	content := string(body)
