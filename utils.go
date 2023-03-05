@@ -23,7 +23,7 @@ func md5str(s string) string {
 }
 
 func extractSingleFileUrl(content string) string {
-	regex, _ := regexp.Compile(`(?s)<!--.*?(htt.+://\S+).*?saved.*?-->`)
+	regex, _ := regexp.Compile(`(?s)<!--.*?(htt.+://\S+).*?saved\sdate.*?-->`)
 	matches := regex.FindStringSubmatch(content)
 	if len(matches) == 2 {
 		return matches[1]
