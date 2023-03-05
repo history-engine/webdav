@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"sort"
 	"strconv"
 )
 
@@ -96,6 +97,10 @@ func listHandler(file webdav.File, w http.ResponseWriter, r *http.Request) {
 	_, _ = fmt.Fprintf(w, "<td></td>\n")
 	_, _ = fmt.Fprintf(w, "<td></td>\n")
 	_, _ = fmt.Fprintf(w, "</tr>\n")
+
+	sort.Slice(files, func(i, j int) bool {
+		return files[i].ModTime().After(files[j].ModTime())
+	})
 
 	for _, d := range files {
 		name := d.Name()
