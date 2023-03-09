@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"io"
 	"net/http"
+	"path/filepath"
 	"regexp"
 )
 
@@ -29,4 +30,12 @@ func extractSingleFileUrl(content string) string {
 		return matches[1]
 	}
 	return ""
+}
+func checkFileNameLength(r *http.Request) {
+	path := r.URL.Path
+	filename := filepath.Base(path)
+	if len(filename) >= 255 {
+		filename = md5str(filename)
+	}
+	r.URL.Path = filepath.Dir(path) + "/" + filename + ".html"
 }

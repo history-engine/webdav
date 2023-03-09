@@ -41,6 +41,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		_ = os.MkdirAll(fileDir, 0755)
 	}
 
+	checkFileNameLength(r)
 	go indexHookHandle(cloneHttpRequest(r))
 
 	handler.ServeHTTP(w, r)
